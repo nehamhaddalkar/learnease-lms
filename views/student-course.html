@@ -1,0 +1,228 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Course Details - LearnEase</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">LearnEase</a>
+    <div class="ms-auto">
+      <a class="nav-link d-inline text-white" href="/student-dashboard">Dashboard</a>
+      <a class="nav-link d-inline text-white" href="/auth/logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container my-5">
+  <div class="row g-4" id="coursesContainer"></div>
+</main>
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+  <p class="mb-0">&copy; 2026 LearnEase. All rights reserved.</p>
+</footer>
+
+<script>
+
+// ✅ Fetch courses from backend
+async function fetchCourses() {
+    try {
+        const res = await fetch('/api/course');
+        const courses = await res.json();
+
+        const container = document.getElementById("coursesContainer");
+        container.innerHTML = "";
+
+        if(courses.length === 0){
+            container.innerHTML = "<p>No courses available</p>";
+            return;
+        }
+
+        courses.forEach(course => {
+            container.innerHTML += `
+            <div class="col-md-6 col-lg-4">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                  <h4 class="card-title">${course.course_name}</h4>
+
+                  <p><strong>Category:</strong> ${course.category || "N/A"}</p>
+                  <p><strong>Duration:</strong> ${course.duration || "N/A"}</p>
+
+                  <p class="text-muted">
+                    ${course.description}
+                  </p>
+
+                  <button onclick="enroll(${course.course_id})"
+                    class="btn btn-primary w-100">
+                    Enroll Now
+                  </button>
+
+                </div>
+              </div>
+            </div>
+            `;
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ✅ Enroll function
+async function enroll(courseId) {
+    try {
+        const res = await fetch('/api/course/enroll', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ course_id: courseId })
+        });
+
+        const data = await res.json();
+        alert(data.message);
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// 🚀 Load courses
+fetchCourses();
+
+</script>
+
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Course Details - LearnEase</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">LearnEase</a>
+    <div class="ms-auto">
+      <a class="nav-link d-inline text-white" href="/student-dashboard">Dashboard</a>
+      <a class="nav-link d-inline text-white" href="/auth/logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container my-5">
+  <div class="row g-4" id="coursesContainer"></div>
+</main>
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+  <p class="mb-0">&copy; 2026 LearnEase. All rights reserved.</p>
+</footer>
+
+<script>
+
+// ✅ Fetch courses from backend
+async function fetchCourses() {
+    try {
+
+      const res = await fetch('http://localhost:5000/api/course');
+      const courses = await res.json();
+
+        const container = document.getElementById("coursesContainer");
+        container.innerHTML = "";
+
+        if (!courses || courses.length === 0) {
+            container.innerHTML = "<p>No courses available</p>";
+            return;
+        }
+
+        // ✅ FIXED LOOP (no innerHTML += bug)
+        courses.forEach(course => {
+
+            const col = document.createElement("div");
+            col.className = "col-md-6 col-lg-4";
+
+            col.innerHTML = `
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+
+                        <h4 class="card-title">${course.course_name}</h4>
+
+                        <p><strong>Category:</strong> ${course.category || "N/A"}</p>
+                        <p><strong>Duration:</strong> ${course.duration || "N/A"}</p>
+
+                        <p class="text-muted">
+                            ${course.description}
+                        </p>
+
+                        <button class="btn btn-primary w-100 enroll-btn"
+                            data-id="${course.course_id}">
+                            Enroll Now
+                        </button>
+
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(col);
+        });
+
+        // ✅ Attach event listeners AFTER render
+        document.querySelectorAll(".enroll-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const courseId = btn.getAttribute("data-id");
+                enroll(courseId, btn);
+            });
+        });
+
+    } catch (err) {
+        console.error("Fetch error:", err);
+    }
+}
+
+// ✅ Enroll function (FIXED)
+async function enroll(courseId, btn) {
+    try {
+        const res = await fetch('/api/course/enroll', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ courseId: courseId }) // ✅ FIXED key
+        });
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        // ✅ Disable button after enroll
+        btn.innerText = "Enrolled";
+        btn.disabled = true;
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-success");
+
+    } catch (err) {
+        console.error("Enroll error:", err);
+    }
+}
+
+// 🚀 Load courses
+fetchCourses();
+
+</script>
+
+</body>
+</html>

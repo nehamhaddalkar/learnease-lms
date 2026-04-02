@@ -1,0 +1,558 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnEase Student Dashboard</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+padding:0;
+min-height:100vh;
+background:linear-gradient(-45deg,#e3f2fd,#bbdefb,#e1f5fe,#f5faff);
+background-size:400% 400%;
+animation:gradientMove 12s ease infinite;
+overflow-x:hidden;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Floating Glow */
+.bg-glow{
+position:fixed;
+width:300px;
+height:300px;
+background:rgba(25,118,210,0.15);
+filter:blur(70px);
+border-radius:50%;
+top:20%;
+right:10%;
+z-index:-1;
+animation:float 10s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-40px);}
+}
+
+/* Header */
+header{
+background:linear-gradient(135deg,#1976d2,#42a5f5);
+color:#fff;
+text-align:center;
+padding:15px 0;
+font-size:1.8rem;
+font-weight:600;
+position:fixed;
+width:100%;
+top:0;
+z-index:1000;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Sidebar */
+.sidebar{
+width:240px;
+height:calc(100vh - 60px);
+background:rgba(255,255,255,0.85);
+backdrop-filter:blur(12px);
+position:fixed;
+top:60px;
+left:0;
+padding:20px;
+box-shadow:2px 0 15px rgba(0,0,0,0.08);
+}
+
+.sidebar ul{list-style:none;padding:0;}
+.sidebar ul li{
+padding:14px;
+margin-bottom:10px;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+}
+.sidebar ul li:hover{
+background:#1976d2;
+color:white;
+transform:translateX(5px);
+}
+
+/* Main */
+.main-content{
+margin-left:300px;
+padding:110px 30px 60px;
+}
+
+.dashboard-header{
+font-size:2rem;
+margin-bottom:30px;
+color:#0d47a1;
+}
+
+/* Stats */
+.stats{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+margin-bottom:40px;
+}
+
+.stat-card{
+background:rgba(255,255,255,0.9);
+padding:20px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+width:220px;
+text-align:center;
+}
+
+.stat-card h2{
+color:#1976d2;
+margin-top:10px;
+font-size:2rem;
+}
+
+/* Cards */
+.cards-container{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+}
+
+.card-link{text-decoration:none;color:inherit;}
+
+.card{
+width:280px;
+padding:25px;
+border-radius:18px;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(12px);
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+text-align:center;
+transition:all 0.6s ease;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 15px 30px rgba(25,118,210,0.25);
+background:linear-gradient(135deg,#1976d2,#42a5f5);
+color:white;
+}
+
+.card p{
+color:#555;
+transition:0.4s;
+}
+
+.card:hover p{color:#e3f2fd;}
+
+footer{
+background:#263238;
+color:#fff;
+text-align:center;
+padding:12px 0;
+margin-top:60px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+.main-content{margin-left:0;padding:120px 20px;}
+.sidebar{position:relative;width:100%;height:auto;}
+.stats,.cards-container{flex-direction:column;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-glow"></div>
+
+<header>LearnEase</header>
+
+<div class="sidebar">
+<ul>
+<li>Dashboard</li>
+<li>Profile</li>
+<li id="logout-btn">Logout</li>
+</ul>
+</div>
+
+<div class="main-content">
+
+<div class="dashboard-header" id="welcome-msg">
+Welcome, Student 👋
+</div>
+
+<!-- Stats Section
+<div class="stats">
+<div class="stat-card">
+<p>Enrolled Courses</p>
+<h2 id="courseCount">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Pending Assignments</p>
+<h2 id="assignmentCount">0</h2>
+</div>
+
+<div class="stat-card">
+<p>Overall Progress</p>
+<h2 id="progressPercent">0%</h2>
+</div>
+</div> -->
+
+<!-- Feature Cards -->
+<!-- <div class="cards-container">
+
+<a href="/course-details.html" class="card-link">
+<div class="card">
+<h3>Courses</h3>
+<p>Enrolled in courses</p>
+</div>
+</a>
+
+<a href="/course-material.html" class="card-link">
+<div class="card">
+<h3>Course Material</h3>
+<p>Access videos, notes & quizzes</p>
+</div>
+</a>
+
+<a href="/assignments.html" class="card-link">
+<div class="card">
+<h3>Submit Assignments</h3>
+<p>Submit your pending assignments</p>
+</div>
+</a>
+
+<a href="/progress.html" class="card-link">
+<div class="card">
+<h3>Progress</h3>
+<p>Track your learning progress</p>
+</div>
+</a>
+
+</div>
+</div>
+
+<footer>
+© 2026 LearnEase. All rights reserved.
+</footer>
+
+<script>
+// ================= USER WELCOME =================
+const user = JSON.parse(localStorage.getItem("user"));
+const welcomeEl = document.getElementById("welcome-msg");
+
+if (user && user.full_name) {
+  welcomeEl.innerText = `Welcome, ${user.full_name}! 👋`;
+}
+
+// ================= COURSE ID =================
+// Agar user ke object me courseId store hai to use karo
+// warna demo ke liye 1 use ho jayega
+const courseId = user?.courseId || 1;
+
+
+// ================= FETCH ENROLLED COURSES COUNT =================
+fetch(`/api/course/lessons/${courseId}`)
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("courseCount").innerText = data.length;
+  })
+  .catch(err => {
+    console.error("Error fetching lessons:", err);
+    document.getElementById("courseCount").innerText = 0;
+  });
+
+
+// ================= FETCH ASSIGNMENT COUNT =================
+fetch(`/api/assignments/${courseId}`)
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("assignmentCount").innerText = data.length;
+  })
+  .catch(err => {
+    console.error("Error fetching assignments:", err);
+    document.getElementById("assignmentCount").innerText = 0;
+  });
+
+
+// ================= PROGRESS CALCULATION =================
+fetch(`/api/course/lessons/${courseId}`)
+  .then(res => res.json())
+  .then(lessons => {
+
+    let progress = 0;
+
+    if (lessons.length > 0) {
+      // Example logic: assume 10 total lessons = 100%
+      progress = Math.floor((lessons.length / 10) * 100);
+      if (progress > 100) progress = 100;
+    }
+
+    document.getElementById("progressPercent").innerText = progress + "%";
+  })
+  .catch(err => {
+    console.error("Error calculating progress:", err);
+    document.getElementById("progressPercent").innerText = "0%";
+  });
+
+
+// ================= LOGOUT =================
+document.getElementById("logout-btn").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
+});
+</script>
+
+</body>
+</html> --> 
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnEase Student Dashboard</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+padding:0;
+min-height:100vh;
+background:linear-gradient(-45deg,#e3f2fd,#bbdefb,#e1f5fe,#f5faff);
+background-size:400% 400%;
+animation:gradientMove 12s ease infinite;
+overflow-x:hidden;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.bg-glow{
+position:fixed;
+width:300px;
+height:300px;
+background:rgba(25,118,210,0.15);
+filter:blur(70px);
+border-radius:50%;
+top:20%;
+right:10%;
+z-index:-1;
+animation:float 10s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-40px);}
+}
+
+header{
+background:linear-gradient(135deg,#1976d2,#42a5f5);
+color:#fff;
+text-align:center;
+padding:15px 0;
+font-size:1.8rem;
+font-weight:600;
+position:fixed;
+width:100%;
+top:0;
+z-index:1000;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.sidebar{
+width:240px;
+height:calc(100vh - 60px);
+background:rgba(255,255,255,0.85);
+backdrop-filter:blur(12px);
+position:fixed;
+top:60px;
+left:0;
+padding:20px;
+box-shadow:2px 0 15px rgba(0,0,0,0.08);
+}
+
+.sidebar ul{list-style:none;padding:0;}
+.sidebar ul li{
+padding:14px;
+margin-bottom:10px;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+}
+.sidebar ul li:hover{
+background:#1976d2;
+color:white;
+transform:translateX(5px);
+}
+
+.main-content{
+margin-left:300px;
+padding:110px 30px 60px;
+}
+
+.dashboard-header{
+font-size:2rem;
+margin-bottom:30px;
+color:#0d47a1;
+}
+
+.cards-container{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+}
+
+.card-link{text-decoration:none;color:inherit;}
+
+.card{
+width:280px;
+padding:25px;
+border-radius:18px;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(12px);
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+text-align:center;
+transition:all 0.6s ease;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 15px 30px rgba(25,118,210,0.25);
+background:linear-gradient(135deg,#1976d2,#42a5f5);
+color:white;
+}
+
+.card p{
+color:#555;
+transition:0.4s;
+}
+
+.card:hover p{color:#e3f2fd;}
+
+footer{
+background:#263238;
+color:#fff;
+text-align:center;
+padding:12px 0;
+margin-top:60px;
+}
+
+@media(max-width:768px){
+.main-content{margin-left:0;padding:120px 20px;}
+.sidebar{position:relative;width:100%;height:auto;}
+.cards-container{flex-direction:column;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-glow"></div>
+
+<header>LearnEase</header>
+
+<div class="sidebar">
+<ul>
+<li>Dashboard</li>
+<li>Profile</li>
+<li id="logout-btn">Logout</li>
+</ul>
+</div>
+
+<div class="main-content">
+
+<div class="dashboard-header" id="welcome-msg">
+Welcome, Student 👋
+</div>
+
+<!-- ✅ UPDATED CARDS -->
+<div class="cards-container">
+
+<!-- 🔥 My Courses -->
+<a href="/my-courses.html" class="card-link">
+<div class="card">
+<h3>My Courses</h3>
+<p>View your enrolled courses</p>
+</div>
+</a>
+
+<!-- 🔥 All Courses -->
+<a href="/course-details.html" class="card-link">
+<div class="card">
+<h3>All Courses</h3>
+<p>Browse & enroll new courses</p>
+</div>
+</a>
+
+<!-- Assignments -->
+<a href="/assignments.html" class="card-link">
+<div class="card">
+<h3>Submit Assignments</h3>
+<p>Submit your pending assignments</p>
+</div>
+</a>
+
+<!-- Progress -->
+<a href="/progress.html" class="card-link">
+<div class="card">
+<h3>Progress</h3>
+<p>Track your learning progress</p>
+</div>
+</a>
+
+<a href="/student-assignments.html" class="card-link">
+<div class="card">
+<h3>View Assignments</h3>
+<p>View Your Assignments</p>
+</div>
+</a>
+
+</div>
+</div>
+
+<footer>
+© 2026 LearnEase. All rights reserved.
+</footer>
+
+<script>
+
+// ✅ USER WELCOME
+const user = JSON.parse(localStorage.getItem("user"));
+const welcomeEl = document.getElementById("welcome-msg");
+
+if (user && user.full_name) {
+  welcomeEl.innerText = `Welcome, ${user.full_name}! 👋`;
+}
+
+// ✅ LOGOUT
+document.getElementById("logout-btn").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
+});
+
+</script>
+
+</body>
+</html>

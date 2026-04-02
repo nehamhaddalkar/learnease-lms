@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Assignments - LearnEase</title>
+
+<style>
+body{
+  font-family:'Poppins',sans-serif;
+  margin:0;
+  background:#eef3f9;
+}
+
+header{
+  background:#1976d2;
+  color:white;
+  text-align:center;
+  padding:15px;
+  font-size:1.6rem;
+}
+
+.container{
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.assignment-card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 6px 12px rgba(0,0,0,0.1);
+}
+
+.title{
+  font-size:1.2rem;
+  font-weight:600;
+  color:#0d47a1;
+}
+
+.course{
+  color:#555;
+  margin:5px 0;
+}
+
+button{
+  padding:8px 15px;
+  border:none;
+  border-radius:8px;
+  background:#1976d2;
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>My Assignments</header>
+
+<div class="container" id="assignmentContainer"></div>
+
+<script>
+
+async function loadAssignments(){
+  try{
+    const res = await fetch("/api/assignments/student", {
+      credentials: "include"
+    });
+
+    const data = await res.json();
+    const container = document.getElementById("assignmentContainer");
+
+    container.innerHTML = "";
+
+    if(data.length === 0){
+      container.innerHTML = "<p>No assignments available</p>";
+      return;
+    }
+
+    data.forEach(a=>{
+      container.innerHTML += `
+        <div class="assignment-card">
+          <div class="title">${a.title}</div>
+          <div class="course">Course: ${a.course_name}</div>
+          <p>${a.description || ""}</p>
+
+          <button onclick="submitAssignment(${a.assignment_id})">
+            Submit
+          </button>
+        </div>
+      `;
+    });
+
+  }catch(err){
+    console.error(err);
+  }
+}
+
+function submitAssignment(id){
+  window.location.href = `/submit-assignment.html?id=${id}`;
+}
+
+loadAssignments();
+
+</script>
+
+</body>
+</html>

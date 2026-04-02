@@ -1,0 +1,472 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - LearnEase</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap'); 
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+    }
+
+    /* Header */
+    header {
+      background-color: #f3f6f9; /* light pastel grey/blue */
+      color: #1976d2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    header .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    header nav a {
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    header nav a:hover {
+      color: #ff6a88;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #34495e; /* dark bluish-grey like login page */
+      color: #ffffff;
+      text-align: center;
+      padding: 15px 20px;
+      margin-top: auto;
+      font-weight: 500;
+    }
+
+    /* Center register card */
+    .register-container {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+      width: 380px;
+      max-width: 90%;
+      margin: 40px auto;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .register-container:hover {
+      transform: translateY(-5px);
+    }
+
+    .register-container h2 {
+      margin-bottom: 25px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .input-field:focus {
+      border-color: #ff6f91; /* matches button accent */
+    }
+
+    .btn-gradient {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #ff9a8b, #ff6a88, #ff99ac);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(255, 106, 136, 0.4);
+    }
+
+    a {
+      display: block;
+      margin-top: 15px;
+      color: #17c3b2;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      header nav {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .register-container {
+        padding: 30px 20px;
+      }
+
+      header .logo {
+        font-size: 1.5rem;
+      }
+
+      footer {
+        font-size: 0.9rem;
+        padding: 12px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">LearnEase</div>
+   <nav>
+  <a href="/about.html">About Us</a>
+  <a href="/contact.html">Contact Us</a>
+  <a href="/help.html">Help</a>
+</nav>
+  </header>
+
+  <div class="register-container">
+    <h2>Create Account</h2>
+    <form id="registerForm">
+      <input type="text" name="username" class="input-field" placeholder="Username" required>
+      <input type="text" name="full_name" class="input-field" placeholder="Full Name" required>
+      <input type="email" name="email" class="input-field" placeholder="Email" required>
+      <input type="password" name="password" class="input-field" placeholder="Password" required>
+      <input type="password" name="confirm_password" class="input-field" placeholder="Confirm Password" required>
+      <input type="text" name="contact_no" class="input-field" placeholder="Contact Number" required>
+      <button type="submit" class="btn-gradient">Register</button>
+      <a href="/login.html">Already have an account? Login</a>
+    </form>
+  </div>
+
+  <footer>&copy; 2026 LearnEase. All rights reserved.</footer>
+
+  <script>
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = form.username.value.trim();
+      const full_name = form.full_name.value.trim();
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const confirm_password = form.confirm_password.value;
+      const contact_no = form.contact_no.value.trim();
+
+      if(password !== confirm_password) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            username,
+            full_name,
+            email,
+            password,
+            contact_no,
+            role: "student"
+          }),
+        });
+
+        const data = await res.json();
+
+        if(res.ok) {
+          alert("Registration successful! Wait for admin approval.");
+          window.location.href = "/login.html";
+        } else {
+          alert(data.message || "Registration failed");
+        }
+      } catch (err) {
+        console.error("Registration error:", err);
+        alert("Something went wrong. Try again later.");
+      }
+    });
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - LearnEase</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  /* 🎯 EXACT IMAGE BACKGROUND */
+  background: url('https://thumbs.dreamstime.com/b/lms-learning-management-system-lesson-online-education-course-application-study-e-knowledge-everywhere-every-time-icon-264576588.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Header SAME */
+header {
+  background-color: #f3f6f9;
+  color: #1976d2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+header .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+header nav {
+  display: flex;
+  gap: 20px;
+}
+
+header nav a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+header nav a:hover {
+  color: #0d47a1;
+}
+
+/* Register Card */
+.register-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+  width: 380px;
+  max-width: 90%;
+  margin: 60px auto;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.register-container:hover {
+  transform: translateY(-6px);
+}
+
+.register-container h2 {
+  margin-bottom: 25px;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.input-field:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 8px rgba(25,118,210,0.3);
+}
+
+.btn-gradient {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1976d2, #0d47a1);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-gradient:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(13, 71, 161, 0.4);
+}
+
+a {
+  display: block;
+  margin-top: 15px;
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Footer transparent */
+footer {
+  background-color: rgba(52, 73, 94, 0.7); /* semi-transparent */
+  color: #ffffff;
+  text-align: center;
+  padding: 15px 20px;
+  margin-top: auto;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  header nav {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 30px 20px;
+  }
+
+  header .logo {
+    font-size: 1.5rem;
+  }
+
+  footer {
+    font-size: 0.9rem;
+    padding: 12px 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">LearnEase</div>
+  <nav>
+    <a href="/about.html">About Us</a>
+    <a href="/contact.html">Contact Us</a>
+    <a href="/help.html">Help</a>
+  </nav>
+</header>
+
+<div class="register-container">
+  <h2>Create Account</h2>
+  <form id="registerForm">
+    <input type="text" name="username" class="input-field" placeholder="Username" required>
+    <input type="text" name="full_name" class="input-field" placeholder="Full Name" required>
+    <input type="email" name="email" class="input-field" placeholder="Email" required>
+    <input type="password" name="password" class="input-field" placeholder="Password" required>
+    <input type="password" name="confirm_password" class="input-field" placeholder="Confirm Password" required>
+    <input type="text" name="contact_no" class="input-field" placeholder="Contact Number" required>
+    <button type="submit" class="btn-gradient">Register</button>
+    <a href="/login.html">Already have an account? Login</a>
+  </form>
+</div>
+
+<footer>&copy; 2026 LearnEase. All rights reserved.</footer>
+
+<script>
+const form = document.getElementById("registerForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const username = form.username.value.trim();
+  const full_name = form.full_name.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value;
+  const confirm_password = form.confirm_password.value;
+  const contact_no = form.contact_no.value.trim();
+
+  if(password !== confirm_password) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        username,
+        full_name,
+        email,
+        password,
+        contact_no,
+        role: "student"
+      }),
+    });
+
+    const data = await res.json();
+
+    if(res.ok) {
+      alert("Registration successful! Wait for admin approval.");
+      window.location.href = "/login.html";
+    } else {
+      alert(data.message || "Registration failed");
+    }
+  } catch (err) {
+    console.error("Registration error:", err);
+    alert("Something went wrong. Try again later.");
+  }
+});
+</script>
+
+</body>
+</html>

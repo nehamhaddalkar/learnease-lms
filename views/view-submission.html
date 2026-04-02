@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Submissions - LearnEase</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+    font-family:'Poppins',sans-serif;
+    margin:0;
+    background:#eef3f9;
+}
+
+header{
+    background:#1976d2;
+    color:white;
+    text-align:center;
+    padding:15px;
+    font-size:1.6rem;
+}
+
+.container{
+    max-width:1000px;
+    margin:30px auto;
+    padding:20px;
+}
+
+/* Card */
+.submission-card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 6px 12px rgba(0,0,0,0.1);
+}
+
+.title{
+    font-size:1.2rem;
+    font-weight:600;
+    color:#0d47a1;
+}
+
+.info{
+    color:#555;
+    margin:5px 0;
+}
+
+.actions{
+    margin-top:10px;
+}
+
+button{
+    padding:8px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-right:8px;
+}
+
+.view-btn{ background:#3498db; color:white; }
+.grade-btn{ background:#2ecc71; color:white; }
+
+input{
+    padding:6px;
+    width:80px;
+    margin-right:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Student Submissions</header>
+
+<div class="container" id="submissionContainer">
+<p>Loading submissions...</p>
+</div>
+
+<script>
+
+async function loadSubmissions(){
+
+const container = document.getElementById("submissionContainer");
+
+try{
+
+// 🔥 API (backend banani padegi)
+const res = await fetch("/api/assignments/submissions", {
+    credentials:"include"
+});
+
+const data = await res.json();
+
+container.innerHTML = "";
+
+if(!data || data.length === 0){
+    container.innerHTML = "<p>No submissions yet ❌</p>";
+    return;
+}
+
+data.forEach(sub => {
+
+container.innerHTML += `
+<div class="submission-card">
+
+<div class="title">${sub.assignment_title}</div>
+
+<div class="info">Student: ${sub.student_name}</div>
+<div class="info">Course: ${sub.course_name}</div>
+
+<div class="actions">
+
+<a href="${sub.file_path}" target="_blank">
+<button class="view-btn">View File</button>
+</a>
+
+<input type="text" placeholder="Grade" id="grade-${sub.submission_id}">
+
+<button class="grade-btn" onclick="submitGrade(${sub.submission_id})">
+Save
+</button>
+
+</div>
+
+</div>
+`;
+
+});
+
+}catch(err){
+console.error(err);
+container.innerHTML = "<p>Error loading submissions ❌</p>";
+}
+
+}
+
+// 🎯 Submit Grade
+async function submitGrade(id){
+
+const grade = document.getElementById(`grade-${id}`).value;
+
+if(!grade){
+    alert("Enter grade");
+    return;
+}
+
+try{
+
+const res = await fetch(`/api/assignments/grade/${id}`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ grade })
+});
+
+const data = await res.json();
+alert(data.message);
+
+loadSubmissions();
+
+}catch(err){
+console.error(err);
+alert("Error saving grade ❌");
+}
+
+}
+
+// 🚀 Load page
+loadSubmissions();
+
+</script>
+
+</body>
+</html>

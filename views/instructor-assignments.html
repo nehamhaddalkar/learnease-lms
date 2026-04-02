@@ -1,0 +1,529 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instructor Assignments - LearnEase</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+background:#eef3f9;
+}
+
+header{
+background:#2980b9;
+color:white;
+padding:15px;
+text-align:center;
+font-size:1.5rem;
+font-weight:600;
+}
+
+.container{
+padding:25px;
+max-width:1000px;
+margin:auto;
+}
+
+.create-btn{
+background:#27ae60;
+color:white;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+.assignment-card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 6px 12px rgba(0,0,0,0.1);
+}
+
+.assignment-title{
+font-size:1.2rem;
+font-weight:600;
+color:#2c3e50;
+}
+
+.assignment-course{
+color:#7f8c8d;
+margin:5px 0 10px;
+}
+
+.actions button{
+margin-right:10px;
+padding:8px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.view-btn{ background:#3498db; color:white; }
+.delete-btn{ background:#e74c3c; color:white; }
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+padding:25px;
+border-radius:12px;
+width:90%;
+max-width:400px;
+}
+
+input, textarea, select{
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.submit-btn{
+background:#2980b9;
+color:white;
+border:none;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+width:100%;
+}
+</style>
+</head>
+
+<body>
+
+<header>Instructor Assignments</header>
+
+<div class="container">
+
+<button class="create-btn" onclick="openModal()">+ Create Assignment</button>
+
+<div id="assignmentList"></div>
+
+</div> -->
+
+<!-- Modal -->
+<!-- <div class="modal" id="assignmentModal">
+<div class="modal-content">
+
+<h3>Create Assignment</h3>
+
+<form id="assignmentForm">
+
+<select id="courseDropdown" required>
+<option value="">Select Course</option>
+</select>
+
+<input type="text" placeholder="Assignment Title" required>
+<textarea placeholder="Assignment Description"></textarea>
+<input type="date" required>
+
+<button class="submit-btn">Create</button>
+
+</form>
+
+</div>
+</div>
+
+<script>
+
+const instructorId = localStorage.getItem("userId");
+
+// 🔥 Load Courses
+function loadCourses(){
+fetch(`http://localhost:5000/api/instructor/courses/${instructorId}`)
+.then(res=>res.json())
+.then(data=>{
+const dropdown=document.getElementById("courseDropdown");
+dropdown.innerHTML=`<option value="">Select Course</option>`;
+
+data.forEach(course=>{
+dropdown.innerHTML+=`<option value="${course.id}">${course.name}</option>`;
+});
+});
+}
+
+// 🔥 Load Assignments
+function loadAssignments(){
+fetch(`http://localhost:5000/api/assignments/instructor/${instructorId}`)
+.then(res=>res.json())
+.then(data=>{
+const list=document.getElementById("assignmentList");
+list.innerHTML="";
+
+data.forEach(a=>{
+list.innerHTML+=`
+<div class="assignment-card">
+<div class="assignment-title">${a.title}</div>
+<div class="assignment-course">Course ID: ${a.courseId}</div>
+<p>Due Date: ${a.due_date}</p>
+
+<div class="actions">
+<button class="view-btn">View</button>
+<button class="delete-btn">Delete</button>
+</div>
+</div>
+`;
+});
+});
+}
+
+// 🔥 Open Modal
+function openModal(){
+document.getElementById("assignmentModal").style.display="flex";
+loadCourses();
+}
+
+// Close modal
+document.getElementById("assignmentModal").addEventListener("click",(e)=>{
+if(e.target.id==="assignmentModal"){
+e.target.style.display="none";
+}
+});
+
+// 🔥 Create Assignment
+document.getElementById("assignmentForm").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+const inputs=e.target.elements;
+
+const data={
+courseId:inputs[0].value,
+title:inputs[1].value,
+description:inputs[2].value,
+due_date:inputs[3].value,
+createdBy:instructorId
+};
+
+fetch("http://localhost:5000/api/assignments/create",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(data)
+})
+.then(res=>res.json())
+.then(data=>{
+alert(data.message);
+document.getElementById("assignmentModal").style.display="none";
+e.target.reset();
+loadAssignments();
+});
+});
+
+// Initial load
+loadAssignments();
+
+</script>
+
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instructor Assignments - LearnEase</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+background:#eef3f9;
+}
+
+header{
+background:#2980b9;
+color:white;
+padding:15px;
+text-align:center;
+font-size:1.5rem;
+font-weight:600;
+}
+
+.container{
+padding:25px;
+max-width:1000px;
+margin:auto;
+}
+
+.create-btn{
+background:#27ae60;
+color:white;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+.assignment-card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 6px 12px rgba(0,0,0,0.1);
+}
+
+.assignment-title{
+font-size:1.2rem;
+font-weight:600;
+color:#2c3e50;
+}
+
+.assignment-course{
+color:#7f8c8d;
+margin:5px 0 10px;
+}
+
+.actions button{
+margin-right:10px;
+padding:8px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.view-btn{ background:#3498db; color:white; }
+.delete-btn{ background:#e74c3c; color:white; }
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+padding:25px;
+border-radius:12px;
+width:90%;
+max-width:400px;
+}
+
+input, textarea, select{
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.submit-btn{
+background:#2980b9;
+color:white;
+border:none;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+width:100%;
+}
+</style>
+</head>
+
+<body>
+
+<header>Instructor Assignments</header>
+
+<div class="container">
+
+<button class="create-btn" onclick="openModal()">+ Create Assignment</button>
+
+<div id="assignmentList"></div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="assignmentModal">
+<div class="modal-content">
+
+<h3>Create Assignment</h3>
+
+<form id="assignmentForm">
+
+<select id="courseDropdown" required>
+<option value="">Select Course</option>
+</select>
+
+<input type="text" placeholder="Assignment Title" required>
+<textarea placeholder="Assignment Description"></textarea>
+<input type="date" required>
+
+<button class="submit-btn">Create</button>
+
+</form>
+
+</div>
+</div>
+
+<script>
+
+const instructorId = localStorage.getItem("userId");
+
+// 🔥 Load Courses (FIXED)
+// function loadCourses(){
+// fetch(`http://localhost:5000/api/instructor/courses/${instructorId}`)
+// .then(res=>res.json())
+// .then(data=>{
+// console.log("Courses:", data);
+
+// const dropdown=document.getElementById("courseDropdown");
+// dropdown.innerHTML=`<option value="">Select Course</option>`;
+
+// if(data.length === 0){
+// dropdown.innerHTML = `<option>No Courses Found</option>`;
+// return;
+// }
+
+// // ✅ FIXED FIELD NAMES
+// data.forEach(course=>{
+// dropdown.innerHTML+=`
+// <option value="${course.course_id}">
+// ${course.title}
+// </option>
+// `;
+// });
+// })
+// .catch(err=>{
+// console.error("Error loading courses:", err);
+// });
+// }
+
+function loadCourses(){
+fetch(`/api/course/instructor`, {
+    credentials: "include"
+})
+.then(res=>res.json())
+.then(data=>{
+console.log("Courses:", data);
+
+const dropdown=document.getElementById("courseDropdown");
+dropdown.innerHTML=`<option value="">Select Course</option>`;
+
+if(!data || data.length === 0){
+dropdown.innerHTML = `<option>No Courses Found</option>`;
+return;
+}
+
+// ✅ FIXED FIELD NAME
+data.forEach(course=>{
+dropdown.innerHTML+=`
+<option value="${course.course_id}">
+${course.course_name}
+</option>
+`;
+});
+})
+.catch(err=>{
+console.error("Error loading courses:", err);
+});
+}
+
+// 🔥 Load Assignments
+function loadAssignments(){
+fetch(`http://localhost:5000/api/assignments/instructor/${instructorId}`)
+.then(res=>res.json())
+.then(data=>{
+const list=document.getElementById("assignmentList");
+list.innerHTML="";
+
+data.forEach(a=>{
+list.innerHTML+=`
+<div class="assignment-card">
+<div class="assignment-title">${a.title}</div>
+<div class="assignment-course">Course ID: ${a.course_id}</div>
+<p>Due Date: ${a.due_date}</p>
+
+<div class="actions">
+<button class="view-btn">View</button>
+<button class="delete-btn">Delete</button>
+</div>
+</div>
+`;
+});
+})
+.catch(err=>{
+console.error("Error loading assignments:", err);
+});
+}
+
+// 🔥 Open Modal
+function openModal(){
+document.getElementById("assignmentModal").style.display="flex";
+loadCourses();
+}
+
+// Close modal
+document.getElementById("assignmentModal").addEventListener("click",(e)=>{
+if(e.target.id==="assignmentModal"){
+e.target.style.display="none";
+}
+});
+
+// 🔥 Create Assignment
+document.getElementById("assignmentForm").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+const inputs=e.target.elements;
+
+const data={
+courseId:inputs[0].value,
+title:inputs[1].value,
+description:inputs[2].value,
+due_date:inputs[3].value,
+createdBy:instructorId
+};
+
+fetch("http://localhost:5000/api/assignments/create",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(data)
+})
+.then(res=>res.json())
+.then(data=>{
+alert(data.message);
+document.getElementById("assignmentModal").style.display="none";
+e.target.reset();
+loadAssignments();
+})
+.catch(err=>{
+console.error("Error creating assignment:", err);
+});
+});
+
+// Initial load
+loadAssignments();
+
+</script>
+
+</body>
+</html>

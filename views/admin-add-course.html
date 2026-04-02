@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add Course - LearnEase</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+padding:0;
+min-height:100vh;
+background: linear-gradient(135deg,#e3f2fd,#f3e5f5);
+display:flex;
+flex-direction:column;
+}
+
+header{
+background:#7b61ff;
+color:white;
+text-align:center;
+padding:18px;
+font-size:1.6rem;
+font-weight:600;
+}
+
+.main{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.container{
+background:#fff;
+padding:30px;
+width:100%;
+max-width:480px;
+border-radius:20px;
+box-shadow:0 15px 40px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+input,textarea,select{
+width:100%;
+padding:10px;
+margin-bottom:14px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#7b61ff,#5a4bff);
+color:white;
+cursor:pointer;
+}
+
+.back-btn{
+display:block;
+text-align:center;
+margin-top:15px;
+text-decoration:none;
+color:#7b61ff;
+}
+</style>
+</head>
+
+<body>
+
+<header>LearnEase - Admin Panel</header>
+
+<div class="main">
+
+<div class="container">
+
+<h2>Add New Course</h2>
+
+<form action="/api/course" method="POST"> 
+
+<label>Course Name</label>
+<input type="text" name="course_name" required>
+
+<label>Description</label>
+<textarea name="description" rows="3" required></textarea>
+
+<label>Category</label>
+<input type="text" name="category" required>
+
+<label>Duration (Weeks)</label>
+<input type="number" name="duration" required>
+
+<label>Assign Instructor</label>
+
+<select name="instructor_id" id="instructorSelect" required>
+<option value="">Select Instructor</option>
+</select>
+
+<button type="submit">Create Course</button>
+
+</form>
+
+<a href="/admin-dashboard.html" class="back-btn">⬅ Back to Dashboard</a>
+
+</div>
+
+</div>
+
+<script>
+fetch("/api/instructors")
+.then(res => res.json())
+.then(response => {
+
+console.log("API Response:", response);
+
+const dropdown = document.getElementById("instructorSelect");
+
+// reset dropdown
+dropdown.innerHTML = '<option value="">Select Instructor.</option>';
+
+// check success
+if(response.success && response.data.length > 0){
+
+    response.data.forEach(instructor => {
+
+        const option = document.createElement("option");
+
+        option.value = instructor.user_id;
+        option.textContent = instructor.full_name;
+
+        dropdown.appendChild(option);
+
+    });
+
+}else{
+    console.log("No instructors found");
+}
+
+})
+.catch(err => {
+    console.log("Fetch Error:", err);
+});
+</script>
+
+</body>
+</html> 
+
+
+
+

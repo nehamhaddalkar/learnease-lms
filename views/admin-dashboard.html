@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - LearnEase</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #e3f2fd; /* same as student dashboard bg */
+}
+
+/* Header - same as student dashboard */
+header {
+    background-color: #1976d2;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Footer - same as student dashboard */
+footer {
+    background-color: #263238;
+    color: #ffffff;
+    text-align: center;
+    padding: 12px 0;
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background-color: #ffffff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 60px; /* header height */
+    bottom: 0;
+    padding: 20px 10px;
+}
+
+.sidebar h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #1976d2;
+    letter-spacing: 1px;
+}
+
+.sidebar a {
+    display: block;
+    margin: 8px 0;
+    padding: 10px;
+    color: #000;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.sidebar a:hover {
+    background-color: #bbdefb;
+    color: #000;
+}
+
+.sidebar .logout-btn {
+    background-color: #1976d2;
+    color: #fff;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 260px;
+    padding: 20px;
+    padding-top: 80px; /* header spacing */
+}
+
+/* Dashboard section background like original */
+.dashboard-section {
+    background-color: #dceefc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.dashboard-header {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1976d2;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Table */
+.table-responsive {
+    overflow-x: auto;
+}
+
+#pending-users thead {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+#pending-users tbody tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        top: 0;
+        box-shadow: none;
+    }
+    .main-content {
+        margin-left: 0;
+        padding-top: 20px;
+    }
+}
+</style>
+</head>
+<body>
+<header>LearnEase</header>
+
+<!-- <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#pending">Pending Users</a>
+    <a href="#delete">Delete Users</a>
+    <a href="#manage">Manage Users</a>
+    <a href="#report">Report</a>
+    <a href="/login.html" class="btn logout-btn">Logout</a>
+</div> -->
+
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+
+    <!-- User Management -->
+    <a href="#pending">Approve Users</a>
+    <a href="#manage">Manage Users</a>
+
+    <!-- Course Management -->
+    <a href="admin-add-course.html">Create Course</a>
+    <!-- <a href="#assign-course">Assign Teacher to Course</a> -->
+
+    <!-- Reports & Messages -->
+    <a href="#reports">View Reports</a>
+    <a href="/admin/contact">View Contact Messages</a>
+
+    <a href="/login.html" class="btn logout-btn">Logout</a>
+</div>
+
+<div class="main-content">
+    <div class="dashboard-section">
+        <div class="dashboard-header">Admin Dashboard</div>
+
+        <h3 id="pending" class="mb-3">Pending Users</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle" id="pending-users">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer>&copy; 2026 LearnEase. All rights reserved.</footer>
+
+<!-- <script>
+const backendURL = "http://localhost:5000/admin/api";
+
+async function fetchPendingUsers() {
+    try {
+        const res = await fetch(`${backendURL}/pending-users`);
+        const users = await res.json();
+        const tbody = document.querySelector("#pending-users tbody");
+        tbody.innerHTML = "";
+
+        if(users.length === 0){
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No pending users 🎉</td></tr>`;
+            return;
+        }
+
+        users.forEach(u => {
+            tbody.innerHTML += `<tr>
+                <td>${u.user_id}</td>
+                <td>${u.full_name}</td>
+                <td>${u.email}</td>
+                <td>
+                    <select class="form-select form-select-sm" id="role-${u.user_id}">
+                        <option value="">Select role</option>
+                        <option value="student" ${u.role === "student" ? "selected" : ""}>Student</option>
+                        <option value="teacher" ${u.role === "teacher" ? "selected" : ""}>Instructor</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="btn btn-success btn-sm me-1" onclick="approveUser(${u.user_id})">Approve</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.user_id})">Delete</button>
+                </td>
+            </tr>`;
+        });
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+async function approveUser(userId) {
+    const roleSelect = document.getElementById(`role-${userId}`);
+    const role = roleSelect.value;
+    if(!role){
+        alert("⚠️ Select a role before approving!");
+        return;
+    }
+    try {
+        const res = await fetch(`${backendURL}/approve-user`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, role })
+        });
+        const data = await res.json();
+        alert(data.message || "✅ User approved successfully!");
+        fetchPendingUsers();
+    } catch(err){
+        console.error(err);
+        alert("❌ Error approving user.");
+    }
+}
+
+async function deleteUser(userId){
+    if(!confirm("Are you sure you want to delete this user?")) return;
+    try {
+        await fetch(`${backendURL}/delete-user/${userId}`, { method: "DELETE" });
+        alert("🗑️ User deleted successfully!");
+        fetchPendingUsers();
+    } catch(err){
+        console.error(err);
+        alert("❌ Error deleting user.");
+    }
+}
+
+fetchPendingUsers();
+</script> -->
+
+<script>
+
+const backendURL = "http://localhost:5000/admin/api";
+
+/* ================= FETCH PENDING USERS ================= */
+
+async function fetchPendingUsers() {
+
+    try {
+
+        const res = await fetch(`${backendURL}/pending-users`);
+        const users = await res.json();
+
+        const tbody = document.querySelector("#pending-users tbody");
+        tbody.innerHTML = "";
+
+        if(users.length === 0){
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-muted">
+                No pending users 🎉
+                </td>
+            </tr>`;
+            return;
+        }
+
+        users.forEach(u => {
+
+            tbody.innerHTML += `
+            <tr>
+
+                <td>${u.user_id}</td>
+
+                <td>${u.full_name}</td>
+
+                <td>${u.email}</td>
+
+                <td>
+                    <select class="form-select form-select-sm" id="role-${u.user_id}">
+
+                        <option value="">Select role</option>
+
+                        <option value="student"
+                        ${u.role === "student" ? "selected" : ""}>
+                        Student
+                        </option>
+
+                        <option value="instructor"
+                        ${u.role === "instructor" ? "selected" : ""}>
+                        Instructor
+                        </option>
+
+                    </select>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-success btn-sm me-1"
+                    onclick="approveUser(${u.user_id})">
+                    Approve
+                    </button>
+
+                    <button class="btn btn-danger btn-sm"
+                    onclick="deleteUser(${u.user_id})">
+                    Delete
+                    </button>
+
+                </td>
+
+            </tr>
+            `;
+
+        });
+
+    } catch(err){
+
+        console.error("Error fetching users:", err);
+
+    }
+
+}
+
+
+/* ================= APPROVE USER ================= */
+
+async function approveUser(userId) {
+
+    const roleSelect = document.getElementById(`role-${userId}`);
+    const role = roleSelect.value;
+
+    if(!role){
+
+        alert("⚠️ Please select role first!");
+
+        return;
+    }
+
+    try {
+
+        const res = await fetch(`${backendURL}/approve-user`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                userId,
+                role
+            })
+
+        });
+
+        const data = await res.json();
+
+        alert(data.message || "✅ User approved successfully!");
+
+        fetchPendingUsers();
+
+    } catch(err){
+
+        console.error("Approve error:", err);
+
+        alert("❌ Failed to approve user");
+
+    }
+
+}
+
+
+/* ================= DELETE USER ================= */
+
+async function deleteUser(userId){
+
+    const confirmDelete = confirm("Are you sure you want to delete this user?");
+
+    if(!confirmDelete) return;
+
+    try {
+
+        const res = await fetch(`${backendURL}/delete-user/${userId}`, {
+
+            method: "DELETE"
+
+        });
+
+        const data = await res.json();
+
+        alert(data.message || "🗑️ User deleted successfully!");
+
+        fetchPendingUsers();
+
+    } catch(err){
+
+        console.error("Delete error:", err);
+
+        alert("❌ Failed to delete user");
+
+    }
+
+}
+
+
+/* ================= LOAD USERS ================= */
+
+fetchPendingUsers();
+
+</script>
+</body>
+</html>

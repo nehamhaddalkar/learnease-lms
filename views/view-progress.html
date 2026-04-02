@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Progress - LearnEase</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+background:#eef3f9;
+}
+
+/* Header */
+header{
+background:#2980b9;
+color:white;
+padding:15px;
+text-align:center;
+font-size:1.5rem;
+font-weight:600;
+}
+
+/* Container */
+.container{
+max-width:1100px;
+margin:auto;
+padding:25px;
+}
+
+/* Filter */
+.filter{
+margin-bottom:20px;
+text-align:right;
+}
+
+select{
+padding:8px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+/* Progress Card */
+.student-card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Student Name */
+.student-name{
+font-size:1.2rem;
+font-weight:600;
+color:#2c3e50;
+}
+
+/* Course */
+.course{
+color:#7f8c8d;
+margin:5px 0 10px;
+}
+
+/* Progress Bar */
+.progress-container{
+background:#ddd;
+height:20px;
+border-radius:20px;
+overflow:hidden;
+margin:10px 0;
+}
+
+.progress-bar{
+height:100%;
+background:#27ae60;
+color:white;
+text-align:center;
+font-size:0.8rem;
+line-height:20px;
+}
+
+/* Result */
+.result{
+margin-top:10px;
+font-weight:500;
+}
+
+/* Back */
+.back{
+text-align:center;
+margin-top:20px;
+}
+
+.back a{
+text-decoration:none;
+color:#2980b9;
+font-weight:500;
+}
+
+/* Responsive */
+@media(max-width:600px){
+
+.container{
+padding:15px;
+}
+
+.student-card{
+padding:15px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>Student Progress</header>
+
+<div class="container">
+
+<!-- Filter -->
+<div class="filter">
+<select id="courseFilter">
+<option value="all">All Courses</option>
+<option value="Web Development">Web Development</option>
+<option value="Python Programming">Python Programming</option>
+<option value="Database Management">Database Management</option>
+</select>
+</div>
+
+<div id="progressList"></div>
+
+<div class="back">
+<a href="instructor-dashboard.html">⬅ Back to Dashboard</a>
+</div>
+
+</div>
+
+<script>
+
+/* Demo Progress Data */
+const progressData = [
+{
+student:"Rahul Sharma",
+course:"Web Development",
+completion:80,
+assignments:"4/5",
+result:"A"
+},
+{
+student:"Sneha Patil",
+course:"Python Programming",
+completion:65,
+assignments:"3/5",
+result:"B"
+},
+{
+student:"Amit Joshi",
+course:"Database Management",
+completion:90,
+assignments:"5/5",
+result:"A+"
+},
+{
+student:"Pooja Desai",
+course:"Web Development",
+completion:55,
+assignments:"2/5",
+result:"C"
+}
+];
+
+const container = document.getElementById("progressList");
+const filter = document.getElementById("courseFilter");
+
+/* Render Function */
+function renderProgress(){
+
+container.innerHTML = "";
+
+let selectedCourse = filter.value;
+
+let filteredData = progressData.filter(p =>
+selectedCourse === "all" || p.course === selectedCourse
+);
+
+filteredData.forEach(p => {
+
+container.innerHTML += `
+<div class="student-card">
+
+<div class="student-name">${p.student}</div>
+<div class="course">${p.course}</div>
+
+<p>Course Completion</p>
+
+<div class="progress-container">
+<div class="progress-bar" style="width:${p.completion}%">
+${p.completion}%
+</div>
+</div>
+
+<p>Assignments Submitted: ${p.assignments}</p>
+
+<p class="result">Result: ${p.result}</p>
+
+</div>
+`;
+
+});
+
+}
+
+renderProgress();
+
+/* Filter Change */
+filter.addEventListener("change", renderProgress);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Assign Instructor - LearnEase</title>
+
+<style>
+body{
+font-family:'Poppins',sans-serif;
+background: linear-gradient(135deg,#e3f2fd,#f3e5f5);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+background:#fff;
+padding:30px;
+width:400px;
+border-radius:20px;
+box-shadow:0 15px 40px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+select,button{
+width:100%;
+padding:10px;
+margin-bottom:15px;
+border-radius:10px;
+border:1px solid #ddd;
+}
+
+button{
+background:#7b61ff;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Assign Instructor</h2>
+
+<select id="courseSelect">
+<option value="">Select Course</option>
+</select>
+
+<select id="instructorSelect">
+<option value="">Select Instructor</option>
+</select>
+
+<button onclick="assignInstructor()">Assign</button>
+
+</div>
+
+<script>
+
+// 🔹 Load Courses
+fetch("/api/course")
+.then(res => res.json())
+.then(data => {
+
+const courseDropdown = document.getElementById("courseSelect");
+
+data.forEach(course => {
+
+const option = document.createElement("option");
+
+option.value = course.course_id;
+option.textContent = course.course_name;
+
+courseDropdown.appendChild(option);
+
+});
+
+});
+
+// 🔹 Load Instructors
+fetch("/api/instructors")
+.then(res => res.json())
+.then(res => {
+
+const instructorDropdown = document.getElementById("instructorSelect");
+
+res.data.forEach(inst => {
+
+const option = document.createElement("option");
+
+option.value = inst.user_id;
+option.textContent = inst.full_name;
+
+instructorDropdown.appendChild(option);
+
+});
+
+});
+
+// 🔹 Assign Instructor
+function assignInstructor(){
+
+const course_id = document.getElementById("courseSelect").value;
+const instructor_id = document.getElementById("instructorSelect").value;
+
+if(!course_id || !instructor_id){
+alert("Please select both fields");
+return;
+}
+
+fetch("/api/course/assign-instructor", {
+method: "PUT",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({ course_id, instructor_id })
+})
+.then(res => res.text())
+.then(msg => {
+alert(msg);
+})
+.catch(err => console.log(err));
+
+}
+
+</script>
+
+</body>
+</html>
